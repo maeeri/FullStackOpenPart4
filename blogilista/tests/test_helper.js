@@ -83,4 +83,13 @@ const getBlogs = async () => {
   return blogs.map(blog => blog.toJSON())
 }
 
-module.exports = { listWithOneBlog, blogs, blogToBeAdded, getBlogs, titlelessBlog, urllessBlog }
+const nonExistingId = async () => {
+  const blog = new Blog({ author: 'someone', url: 'n/a', title: 'to be removed' })
+  await blog.save()
+  const id = blog.id.toString()
+  await blog.remove()
+
+  return id
+}
+
+module.exports = { listWithOneBlog, blogs, blogToBeAdded, getBlogs, titlelessBlog, urllessBlog, nonExistingId }
