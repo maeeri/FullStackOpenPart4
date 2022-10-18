@@ -1,9 +1,39 @@
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const bcrypt = require('bcryptjs')
+const supertest = require('supertest')
+const app = require('../app')
+const api = supertest(app)
 
 const blogToBeAdded = {
   title: 'This is a test blog post',
   author: 'Maija Mehiläinen',
   url: 'www.google.com'
+}
+
+const initialUsers = [{
+  username: 'maijameh',
+  name: 'Maija Mehiläinen',
+},
+{
+  username: 'faijameh',
+  name: 'Faija Mehiläinen',
+}]
+
+const userToBeAdded = {
+  username: 'nilsh',
+  name: 'Nils Holgersson',
+  password: 'password'
+}
+
+const userWithShortUsername = {
+  username: 'ab',
+  password: 'password'
+}
+
+const userWithShortPassword = {
+  username: 'username',
+  password: 'mn'
 }
 
 const titlelessBlog = {
@@ -78,6 +108,26 @@ const blogs = [
   }
 ]
 
+const getToken = async (login) => {
+  const response = await api
+    .post('/api/login')
+    .send(login)
+    .expect(200)
+
+  return 'bearer ' + response.body.token
+}
+
+const validToken = async () => {
+  const token =  await getToken({ username: 'maijameh', password: 'password' })
+  return token
+}
+const nonValidToken = async () => await getToken({ username: 'faijameh', password: 'password' })
+
+const getUsers = async () => {
+  const users = await User.find({})
+  return users.map(user => user.toJSON())
+}
+
 const getBlogs = async () => {
   const blogs = await Blog.find({})
   return blogs.map(blog => blog.toJSON())
@@ -92,4 +142,19 @@ const nonExistingId = async () => {
   return id
 }
 
-module.exports = { listWithOneBlog, blogs, blogToBeAdded, getBlogs, titlelessBlog, urllessBlog, nonExistingId }
+module.exports = {
+  listWithOneBlog,
+  blogs,
+  blogToBeAdded,
+  getBlogs,
+  titlelessBlog,
+  urllessBlog,
+  nonExistingId,
+  initialUsers,
+  userToBeAdded,
+  getUsers,
+  userWithShortUsername,
+  userWithShortPassword,
+  validToken,
+  nonValidToken
+}

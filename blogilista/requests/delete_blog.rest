@@ -1,9 +1,2 @@
-POST http://localhost:3003/api/blogs
-Content-Type: application/json
+DELETE http://localhost:3003/api/blogs/63494637e63d32f2497b4ccf
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hZSIsImlkIjoiNjM0OTJlMzkwNzc2NGMzODQ4N2NmZWIzIiwiaWF0IjoxNjY2MDY5MjE1fQ.nAfEofp-4ob_eqzVxDyVQrnO3szx3fqWkzHqei5lupM
-
-{
-    "author": "author",
-    "title": "another title",
-    "url": "google.com"
-}
