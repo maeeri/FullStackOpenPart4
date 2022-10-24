@@ -1,0 +1,6 @@
+PUT http://localhost:3003/api/users/634f97928ed86825fcaf9491
+Content-Type: application/json
+
+{
+    "password": "itsapassword"
+}

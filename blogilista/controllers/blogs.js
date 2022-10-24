@@ -3,16 +3,19 @@ const blogsRouter = express.Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
+const { userExtractor } = require('../utils/middleware')
 
 const logger = require('../utils/logger')
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user')
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
   response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response) => {
+blogsRouter.post('/', userExtractor, async (request, response) => {
+
   const blog = new Blog(request.body)
+  logger.info(blog)
 
   blog.likes = request.body.likes || 0
   const user = request.user
@@ -20,12 +23,14 @@ blogsRouter.post('/', async (request, response) => {
   blog.user = user
 
   if (blog.title === undefined || blog.url === undefined) {
-    response.status(400).end()
+    logger.info('i shouldn\'t be here, this is the blogscontroller post method error branch')
+    return response.status(400).end()
   }
 
   const savedBlog = await blog.save()
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()
+  logger.info('i got to the end of post method')
   response.status(201).json(blog)
 })
 
@@ -38,7 +43,7 @@ blogsRouter.get('/:id', async (request, response) => {
   }
 })
 
-blogsRouter.put('/:id', async (request, response) => {
+blogsRouter.put('/:id', userExtractor, async (request, response) => {
   const body = request.body
   const id = request.params.id
 
@@ -47,11 +52,15 @@ blogsRouter.put('/:id', async (request, response) => {
   } else if (await Blog.findById(id)) {
     const blog = await Blog.findById(id)
     if (request.user.id.toString() === blog.user.toString()) {
-      blog.author= body.author
-      blog.title= body.title
-      blog.url= body.url
-      blog.likes= body.likes
+      blog.author = body.author
+      blog.title = body.title
+      blog.url = body.url
+      blog.likes = body.likes
 
+      const updateBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true  })
+      response.json(updateBlog)
+    } else if (blog.likes !== body.likes) {
+      blog.likes = body.likes
       const updateBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true  })
       response.json(updateBlog)
     } else {
@@ -62,7 +71,7 @@ blogsRouter.put('/:id', async (request, response) => {
   }
 })
 
-blogsRouter.delete('/:id', async (request, response) => {
+blogsRouter.delete('/:id', userExtractor, async (request, response) => {
   const id = request.params.id
 
   if (request.token === null) {

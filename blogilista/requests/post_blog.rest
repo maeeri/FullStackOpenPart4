@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hZSIsImlkIjoiNjM0OTJlMzkwNzc2NGMzODQ4N2NmZWIzIiwiaWF0IjoxNjY2MDY5MjE1fQ.nAfEofp-4ob_eqzVxDyVQrnO3szx3fqWkzHqei5lupM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hZSIsImlkIjoiNjM0Zjk3OTI4ZWQ4NjgyNWZjYWY5NDkxIiwiaWF0IjoxNjY2MTYwNTQ5fQ.QAg9pNgJ5WGhnwkKASf02vU5wBJmdjw4iLBuDVlGj4E
 
 {
-    "author": "author",
-    "title": "another title",
-    "url": "google.com"
+   "title": "This is another test blog post",
+  "author": "Nils Holgersson",
+  "url": "www.google.com/blog"
 }

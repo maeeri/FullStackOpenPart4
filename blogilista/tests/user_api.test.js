@@ -12,7 +12,7 @@ const api = supertest(app)
 describe('when there is initially one user at db', () => {
   beforeEach(async () => {
     await User.deleteMany({})
-    const user = new User(helper.initialUser)
+    const user = new User(helper.initialUsers[0])
     user.password = await bcrypt.hash('salasana', 10)
     await user.save()
   })
@@ -37,7 +37,7 @@ describe('when there is initially one user at db', () => {
 
   test('creation fails with a username already used', async () => {
     const usersAtStart = await helper.getUsers()
-    const newUser = helper.initialUser
+    const newUser = helper.initialUsers[0]
 
     await api
       .post('/api/users')
