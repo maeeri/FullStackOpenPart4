@@ -55,6 +55,7 @@ blogsRouter.put('/:id', userExtractor, async (request, response) => {
       blog.author = body.author
       blog.title = body.title
       blog.url = body.url
+      blog.comments = body.comments
       blog.likes = body.likes
 
       const updateBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true  })
@@ -63,7 +64,12 @@ blogsRouter.put('/:id', userExtractor, async (request, response) => {
       blog.likes = body.likes
       const updateBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true  })
       response.json(updateBlog)
+    } else if (blog.comments !== body.comments) {
+      blog.comments = body.comments
+      const updateBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true  })
+      response.json(updateBlog)
     } else {
+      console.log(response)
       response.status(401).end()
     }
   } else {

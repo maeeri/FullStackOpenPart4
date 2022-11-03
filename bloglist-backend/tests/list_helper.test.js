@@ -21,7 +21,7 @@ describe('total likes', () => {
   })
 })
 
-describe('favourite blog', () => {
+describe.only('favourite blog', () => {
   test('of empty list is null', () => {
     expect(listHelper.favouriteBlog([])).toEqual(null)
   })
@@ -31,6 +31,7 @@ describe('favourite blog', () => {
   })
 
   test('in a list of multiple blogs to be the one with most likes', () => {
+    console.log(listHelper.favouriteBlog(helper.blogs))
     expect(listHelper.favouriteBlog(helper.blogs)).toEqual(helper.blogs[2])
   })
 })

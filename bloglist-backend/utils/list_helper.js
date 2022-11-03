@@ -26,7 +26,12 @@ const totalLikes = blogs => {
 const favouriteBlog = blogs => {
   let likesList = blogs.map(blog => blog.likes)
   let blog = blogs.find(blog => blog.likes === Math.max(...likesList))
-  return (blogs.length === 0) ? null : blog
+  let response = {
+    title: blog.title,
+    author: blog.author,
+    likes: blog.likes
+  }
+  return (blogs.length === 0) ? null : response
 }
 
 //finds the author with most blog objects
